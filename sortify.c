@@ -21,9 +21,36 @@ void print_menu(void);
 
 int main(int argc, char **argv)
 {
+	while(1){
+		puts(MSG_WELCOME);
+		puts(print_menu);
 
-	puts(MSG_WELCOME);
+		/* 'a' is the variable that decides what command the user inputs*/
+		char a;
 
+		scanf("%c", &a);
+
+		if (a == 'p'){
+			
+		}
+
+		else if (a == 'm'){
+			
+		}
+
+		else if (a == 's'){
+
+		}
+
+		else if (a == 'q'){
+			break;
+		}
+
+		else{
+			puts(MSG_UNKNOWN);
+		}
+
+	}
 	return 0;
 }
 
