@@ -17,24 +17,41 @@
 int rand_number(const int, const int);
 void print_status(const int, const int, const int);
 void print_menu(void);
-void challenge(void);
+void challenge(int *, int *, int *);
+int rand_number_level(int);
+int level_status(int *, int *);
 
 
 int main()
 {
+	/* 'a' is the variable that decides what command the user inputs*/
+	char a;
+	int score = 0, stage = 1, plays = 0;
+
 	puts(MSG_WELCOME);
 	print_menu();
 
 	while(1){
 
-		/* 'a' is the variable that decides what command the user inputs*/
-		char a;
+		// Verifica se o nível é igual a 6, e caso for, mostra uma mensagem de que o jogador ganhou o jogo e termina o programa.
+		if (stage == 6){
+			puts(MSG_WIN);
+			break;
+		}
 
-		scanf("%c/n", &a);
+		// Verifica se o número de rondas é maior do que 30, e caso for, mostra uma mensagem que o jogador chegou a o limite de jogadas e termina o programa.
+		if (plays > 30){
+			puts(MSG_MAX);
+			print_status(stage, score, plays);
+			break;
+		}
+
+		// Verifica o input primário do jogador.
+		scanf("%c", &a);
 
 		if (a == 'p'){
-			/* Has no arguments but is supposed to have: points, level, coiso*/
-			challenge();
+			challenge(&score, &stage, &plays);
+			level_status(&score, &stage);
 			continue;
 		}
 
@@ -44,8 +61,7 @@ int main()
 		}
 
 		else if (a == 's'){
-			/* Comentário abaixo para não lixar o código*/
-			/*print_status(level, score, plays);*/
+			print_status(stage, score, plays);
 			continue;
 
 		}
@@ -61,10 +77,12 @@ int main()
 		}
 
 	}
+
+	puts(MSG_OVER);
 	return 0;
 }
 
-/* generate a random integer between min and max */
+/* Gera uma integral random entre min e max */
 int rand_number(const int min, const int max)
 {
 	if (max < min)
@@ -77,16 +95,17 @@ int rand_number(const int min, const int max)
 }
 
 /* Recebe points, level, rounds*/ 
-void challenge (void){
+void challenge (int * points, int * level, int * rounds){
 
-	// Cria os números randómicos que irão ser propostos ao jogador
+	// Cria os números randómicos que irão ser propostos ao jogador.
 	int game_number[4] = {
-		rand_number(0, 10), // 4
-		rand_number(0, 10), // 8
-		rand_number(0, 10), // 9
-		rand_number(0, 10)  // 3
+		random_number_level(*level), 
+		random_number_level(*level), 
+		random_number_level(*level), 
+		random_number_level(*level)  
 	};
 
+	// Vetor inicializado para ser trocado pelos inputs do jogador.
 	int player_answer[4];
 
 	puts(MSG_SORT"\n");
@@ -108,23 +127,85 @@ void challenge (void){
 		}
 	}
 	
+	
+
 	// Este scanf guarda o input do jogador no vetor player_answer, que foi decalarada acima.
 	scanf("%d %d %d %d", &player_answer[0], &player_answer[1], &player_answer[2], &player_answer[3]);
 
+	// Um if que verifica se um dos números do jogador não está em game_number, e após isto dá outra possibilidade do jogador modificar a resposta.
+	if ((player_answer[0] != game_number[0] && player_answer[0] != game_number[1] && player_answer[0] != game_number[2] && player_answer[0] != game_number[3]) 
+	|| (player_answer[1] != game_number[0] && player_answer[1] != game_number[1] &&  player_answer[1] != game_number[2] && player_answer[1] != game_number[3]) 
+	|| (player_answer[2] != game_number[0] && player_answer[2] != game_number[1] && player_answer[2] != game_number[2] && player_answer[2] != game_number[3]) 
+	|| (player_answer[3] != game_number[0] && player_answer[3] != game_number[1] && player_answer[3] != game_number[2] && player_answer[3] != game_number[3])){
+		puts(MSG_SORT2);
+		scanf("%d %d %d %d", &player_answer[0], &player_answer[1], &player_answer[2], &player_answer[3]);
+	}
+
+	// Verifica se o jogador respondeu corretamente.
 	if (player_answer[0] == game_number[0] && player_answer[1] == game_number[1] && player_answer[2] == game_number[2] && player_answer[3] == game_number[3]){
-		puts(MSG_WELL"\n");
+		puts(MSG_WELL);
+		*points += 5;
+		*rounds += 1;
 		return;
 	}
 
-	// Fazer um else if que verifique se um dos números do jogador não está em game_number
-
+	// Else para verificar caso o jogador erre a mensagem.
 	else {
-		puts(MSG_WRONG"\n");
+		puts(MSG_WRONG);
+		*rounds += 1;
 		return;
 	}
 }
 
-/* print the game status */
+/* Função que atualiza o nível consoante os pontos*/
+int level_status(int * a, int * b){
+	if (*a < 10) {
+		*b = 1;
+	}
+	
+	else if (*a >= 10 && *a < 20){
+		*b = 2;
+	}
+
+	else if (*a >= 20 && *a < 30){
+		*b = 3;
+	}
+
+	else if (*a >= 30 && *a < 40){
+		*b = 4;
+	}
+
+	else if (*a >= 40 && *a < 50){
+		*b = 5;
+	}
+
+	else if (*a >= 50 && *a < 60){
+		*b = 5;
+	}
+
+	else if (*a >= 60){
+		*b = 6; 
+	}
+
+	return 0;
+}
+
+/* Imprime o número randómico de um nível específico */
+int random_number_level(int level){
+	if (level == 1)
+		return rand_number(0, 10);
+	if (level == 2)
+		return rand_number(0, 30);
+	if (level == 3)
+		return rand_number(-50, 10);
+	if (level == 4)
+		return rand_number(-100, 0);
+	if (level == 5)
+		return rand_number(-200, -100);
+	else 
+		return 0;
+}
+/* Imprime o estado atual do jogo */
 void print_status(const int level, const int score, const int plays)
 {
 	puts("+-----------------------------+");
@@ -134,12 +215,12 @@ void print_status(const int level, const int score, const int plays)
 	puts("+-----------------------------+");
 }
 
-/* print the option menu */
+/* Imprime o menu de opções */
 void print_menu()
 {
 	puts("+-----------------------------+");
 	puts("| SORTIFY                     |");
-	puts("| p - next chalenge           |");
+	puts("| p - next challenge          |");
 	puts("| q - quit                    |");
 	puts("| m - print this information  |");
 	puts("| s - show your status        |");
