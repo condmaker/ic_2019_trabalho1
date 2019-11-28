@@ -17,27 +17,29 @@
 int rand_number(const int, const int);
 void print_status(const int, const int, const int);
 void print_menu(void);
-void challenge(int, int, int);
+void challenge(void);
 
 
-int main(int argc, char **argv)
+int main()
 {
 	puts(MSG_WELCOME);
-	puts(print_menu);
+	print_menu();
+
 	while(1){
 
 		/* 'a' is the variable that decides what command the user inputs*/
 		char a;
 
-		scanf("%c", &a);
+		scanf("%c/n", &a);
 
 		if (a == 'p'){
 			/* Has no arguments but is supposed to have: points, level, coiso*/
 			challenge();
+			continue;
 		}
 
 		else if (a == 'm'){
-			puts(print_menu);
+			print_menu();
 			continue;
 		}
 
@@ -74,34 +76,51 @@ int rand_number(const int min, const int max)
 	return (rand() % n) + min;
 }
 
+/* Recebe points, level, rounds*/ 
 void challenge (void){
 
-	char game_number[4] = {
-		rand_number(0, 10),
-		rand_number(0, 10),
-		rand_number(0, 10),
-		rand_number(0, 10)
+	// Cria os números randómicos que irão ser propostos ao jogador
+	int game_number[4] = {
+		rand_number(0, 10), // 4
+		rand_number(0, 10), // 8
+		rand_number(0, 10), // 9
+		rand_number(0, 10)  // 3
 	};
 
-	for (int j = 0; j < 4; j++){
+	int player_answer[4];
 
-		char game_number_compare[4];
-		int retard_number = INFINITY;
-		int index;
+	puts(MSG_SORT"\n");
 
-		for(int i = 0; i < sizeof(game_number); i++){
-			if(game_number[i] < retard_number){
-				retard_number = game_number;
-				index = i;
+	// Mostra os números randómicos ao jogador.
+	printf("%d, %d, %d, %d\n", game_number[0], game_number[1], game_number[2], game_number[3]); 
+
+	/*  Estes dois ciclos for irão percorrer cada um dos números em game_number e trocar o número seguinte pelo outro se o tal seguinte for menor.  
+		No fim do ciclo, o vetor game_number irá estar completamente ordenado.                                                                     */
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (game_number[j] > game_number [j+1]){
+				int carry = game_number[j];
+				game_number[j] = game_number[j+1];
+				game_number[j+1] = carry;
 			}
 		}
+	}
+	
+	// Este scanf guarda o input do jogador no vetor player_answer, que foi decalarada acima.
+	scanf("%d %d %d %d", &player_answer[0], &player_answer[1], &player_answer[2], &player_answer[3]);
 
-		game_number_compare[j] = retard_number;
-		game_number[index] = INFINITY;
-		
-		// printf para Debugging, verificar se está a comparar e a ordenar os números corretamentes
-		printf("%s", game_number_compare);
-		printf("%s", game_number);
+	if (player_answer[0] == game_number[0] && player_answer[1] == game_number[1] && player_answer[2] == game_number[2] && player_answer[3] == game_number[3]){
+		puts(MSG_WELL"\n");
+		return;
+	}
+
+	// Fazer um else if que verifique se um dos números do jogador não está em game_number
+
+	else {
+		puts(MSG_WRONG"\n");
+		return;
 	}
 }
 
@@ -116,7 +135,7 @@ void print_status(const int level, const int score, const int plays)
 }
 
 /* print the option menu */
-void print_menu(void)
+void print_menu()
 {
 	puts("+-----------------------------+");
 	puts("| SORTIFY                     |");
