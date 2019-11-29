@@ -19,12 +19,12 @@ void print_status(const int, const int, const int);
 void print_menu(void);
 void challenge(int *, int *, int *);
 int rand_number_level(int);
-int level_status(int *, int *);
+void level_status(int *, int *);
 
 
 int main()
 {
-	/* 'a' is the variable that decides what command the user inputs*/
+	//'a' é a variável que decide que comando o usuário põe.
 	char a;
 	int score = 0, stage = 1, plays = 0;
 
@@ -47,7 +47,22 @@ int main()
 		}
 
 		// Verifica o input primário do jogador.
-		scanf("%c", &a);
+		a = getch();
+		printf("%c\n", a);
+		/*scanf("%s", &a);
+
+		// Arruma o input do jogador para apenas verificar o primeiro input da letra.
+		for (int g = 0; a[g] != "\0"; g++){
+			if (a[g] == ' '){
+				*a = &a[g];
+			}
+			else {
+				a[g+1] = '\0';
+				break;
+			}
+		} 
+
+		printf("%s", a); */
 
 		if (a == 'p'){
 			challenge(&score, &stage, &plays);
@@ -108,7 +123,7 @@ void challenge (int * points, int * level, int * rounds){
 	// Vetor inicializado para ser trocado pelos inputs do jogador.
 	int player_answer[4];
 
-	puts(MSG_SORT"\n");
+	puts(MSG_SORT);
 
 	// Mostra os números randómicos ao jogador.
 	printf("%d, %d, %d, %d\n", game_number[0], game_number[1], game_number[2], game_number[3]); 
@@ -127,8 +142,6 @@ void challenge (int * points, int * level, int * rounds){
 		}
 	}
 	
-	
-
 	// Este scanf guarda o input do jogador no vetor player_answer, que foi decalarada acima.
 	scanf("%d %d %d %d", &player_answer[0], &player_answer[1], &player_answer[2], &player_answer[3]);
 
@@ -158,7 +171,7 @@ void challenge (int * points, int * level, int * rounds){
 }
 
 /* Função que atualiza o nível consoante os pontos*/
-int level_status(int * a, int * b){
+void level_status(int * a, int * b){
 	if (*a < 10) {
 		*b = 1;
 	}
@@ -187,23 +200,24 @@ int level_status(int * a, int * b){
 		*b = 6; 
 	}
 
-	return 0;
+	return;
 }
 
 /* Imprime o número randómico de um nível específico */
 int random_number_level(int level){
-	if (level == 1)
-		return rand_number(0, 10);
-	if (level == 2)
-		return rand_number(0, 30);
-	if (level == 3)
-		return rand_number(-50, 10);
-	if (level == 4)
-		return rand_number(-100, 0);
-	if (level == 5)
-		return rand_number(-200, -100);
-	else 
-		return 0;
+	switch (level){
+		case 1:
+			return rand_number(0, 10);
+		case 2:
+			return rand_number(0, 30);
+		case 3:
+			return rand_number(-50, 10);
+		case 4:
+			return rand_number(-100, 0);
+		case 5:
+			return rand_number(-200, -100);
+	}
+	return 0;
 }
 /* Imprime o estado atual do jogo */
 void print_status(const int level, const int score, const int plays)
