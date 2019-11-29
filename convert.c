@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 
 		else if (a == 'q'){
 			puts(MSG_BYE);
-			break;
+			quit();
 		}
 
 		else{
