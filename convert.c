@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
+// Utilize puts() para imprimir strings constantes
 #define MSG_WELCOME "WELCOME TO SORTIFY!"
 #define MSG_SORT "Sort the following numbers:"
 #define MSG_SORT2 "Please sort the numbers"
@@ -12,19 +14,23 @@
 #define MSG_MAX "You have reached the maximum number of moves."
 #define MSG_BYE "Bye."
 #define MSG_UNKNOWN "Unknown option."
-/* Use puts() to print constant strings */
 
 int rand_number(const int, const int);
 void print_status(const int, const int, const int);
 void print_menu(void);
 void challenge(int *, int *, int *);
-int rand_number_level(int);
+int random_number_level(int);
 void level_status(int *, int *);
 
-
-int main()
+int main(int argc, char **argv)
 {
-	//'a' é a variável que decide que comando o usuário põe.
+	// Utiliza o argumento inicial como seed do programa e se estiver ausente baseia a tal seed no tempo atual.
+	if (argc == 2){
+		srand(*argv[1]);}
+	else{
+		srand(time(0));}
+
+	// 'a' é a variável que decide que comando o usuário põe.
 	char a;
 	int score = 0, stage = 1, plays = 0;
 
