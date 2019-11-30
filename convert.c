@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <conio.h>
 
 // Utilize puts() para imprimir strings constantes
 #define MSG_WELCOME "WELCOME TO SORTIFY!"
@@ -75,7 +76,7 @@ int main(int argc, char **argv)
 
 		else if (a == 'q'){
 			puts(MSG_BYE);
-			quit();
+			exit(0);
 		}
 
 		else{
