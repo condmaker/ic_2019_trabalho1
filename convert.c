@@ -52,23 +52,9 @@ int main(int argc, char **argv)
 			break;
 		}
 
-		// Verifica o input primário do jogador.
+		// Verifica o input primário do jogador e imprime.
 		a = getch();
 		printf("%c\n", a);
-		/*scanf("%s", &a);
-
-		// Arruma o input do jogador para apenas verificar o primeiro input da letra.
-		for (int g = 0; a[g] != "\0"; g++){
-			if (a[g] == ' '){
-				*a = &a[g];
-			}
-			else {
-				a[g+1] = '\0';
-				break;
-			}
-		} 
-
-		printf("%s", a); */
 
 		if (a == 'p'){
 			challenge(&score, &stage, &plays);
@@ -103,7 +89,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-/* Gera uma integral random entre min e max */
+/* Gera um inteiro random entre min e max */
 int rand_number(const int min, const int max)
 {
 	if (max < min)
